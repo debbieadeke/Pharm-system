@@ -71,12 +71,10 @@
             </div>
             -->
 
-            <div class="col col-md-2 form-group">
+            <div class="col col-md-3 form-group">
               <label class="font-weight-bold" for="paytype">Payment Type :</label>
               <select id="payment_type" name="paytype" class="form-control">
               	<option value="Cash Payment">Cash Payment</option>
-                <option value="Net Banking">Net Banking</option>
-                <option value="Payment Due">Payment Due</option>
               </select>
             </div>
 
@@ -107,7 +105,7 @@
             <div class="col col-md-1">Ex. Date (mm/yy)</div>
             <div class="col col-md-1">Quantity</div>
             <div class="col col-md-1">MRP</div>
-            <div class="col col-md-1">Rate</div>
+            <!-- <div class="col col-md-1">Rate</div> -->
             <div class="row col col-md-3">
               <div class="col col-md-7">Amount</div>
               <div class="col col-md-5">Action</div>

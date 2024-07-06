@@ -7,9 +7,8 @@
 		<script src="bootstrap/js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="shortcut icon" href="images/icon.svg" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/sidenav.css">
     <link rel="stylesheet" href="css/home.css">
     <script src="js/restrict.js"></script>
@@ -28,51 +27,65 @@
         <!-- form content -->
         <div class="row">
           <div class="row col col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <?php
 
-            <?php
-              function createSection1($location, $title, $table) {
-                require 'php/db_connection.php';
+require 'php/db_connection.php'; // Ensure you have included your database connection
 
-                $query = "SELECT * FROM $table";
-                if($title == "Out of Stock")
-                  $query = "SELECT * FROM $table WHERE QUANTITY = 0";
+/**
+ * Counts items in a database table with an optional condition.
+ *
+ * @param mysqli $con Database connection object
+ * @param string $table Database table name
+ * @param string $condition Optional SQL condition
+ * @return int Count of items
+ */
+function countItems($con, $table, $condition = "") {
+    $query = "SELECT COUNT(*) AS total FROM $table";
+    if (!empty($condition)) {
+        $query .= " WHERE $condition";
+    }
+    
+    $result = mysqli_query($con, $query);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+    return 0; // Return 0 if the query fails or no rows are found
+}
 
-                $result = mysqli_query($con, $query);
-                $count = mysqli_num_rows($result);
+/**
+ * Creates a dashboard section with a count of items.
+ *
+ * @param mysqli $con Database connection object
+ * @param string $location URL to link to
+ * @param string $title Title of the section
+ * @param string $table Database table name
+ * @param string $condition Optional SQL condition
+ */
+function createSection1($con, $location, $title, $table, $condition = "") {
+    $count = countItems($con, $table, $condition);
+
+    echo '
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" style="padding: 10px">
+          <div class="dashboard-stats" onclick="location.href=\''.$location.'\'">
+            <a class="text-dark text-decoration-none" href="'.$location.'">
+              <span class="h4">'.$count.'</span>
+              <div class="small font-weight-bold">'.$title.'</div>
+            </a>
+          </div>
+        </div>
+    ';
+}
+
+// Usage of createSection1 for different dashboard sections
+createSection1($con, 'manage_customer.php', 'Total Customers', 'customers');
+createSection1($con, 'manage_supplier.php', 'Total Suppliers', 'suppliers');
+createSection1($con, 'manage_medicine.php', 'Total Medicine', 'medicines');
+createSection1($con, 'manage_medicine_stock.php?out_of_stock', 'Out of Stock Medicines', 'medicines_stock', 'QUANTITY = 0');
+createSection1($con, 'manage_medicine_stock.php?expired', 'Expired Medicines', 'medicines_stock', "STR_TO_DATE(CONCAT('01/', EXPIRY_DATE), '%d/%m/%y') < CURDATE()");
+createSection1($con, 'manage_invoice.php', 'Total Invoices', 'invoices');
+?>
 
 
-                if($title == "Expired") {
-                  // logic
-                  $count = 0;
-                  while($row = mysqli_fetch_array($result)) {
-                    $expiry_date = $row['EXPIRY_DATE'];
-                    if(substr($expiry_date, 3) < date('y'))
-                      $count++;
-                    else if(substr($expiry_date, 3) == date('y')) {
-                      if(substr($expiry_date, 0, 2) < date('m'))
-                        $count++;
-                    }
-                  }
-                }
-
-                echo '
-                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" style="padding: 10px">
-                    <div class="dashboard-stats" onclick="location.href=\''.$location.'\'">
-                      <a class="text-dark text-decoration-none" href="'.$location.'">
-                        <span class="h4">'.$count.'</span>
-                        <div class="small font-weight-bold">'.$title.'</div>
-                      </a>
-                    </div>
-                  </div>
-                ';
-              }
-              createSection1('manage_customer.php', 'Total Customers', 'customers');
-              createSection1('manage_supplier.php', 'Total Suppliers', 'suppliers');
-              createSection1('manage_medicine.php', 'Total Medicine', 'medicines');
-              createSection1('manage_medicine_stock.php?out_of_stock', 'Out of Stock Medicine', 'medicines_stock');
-              createSection1('manage_medicine_stock.php?expired', 'Expired Medicine', 'medicines_stock');
-              createSection1('manage_invoice.php', 'Total Invoices', 'invoices');
-            ?>
 
           </div>
 
@@ -118,7 +131,7 @@
 
         </div>
 
-        <hr style="border-top: 2px solid #ff5252;">
+        <hr style="border-top: 2px solid #AC3E31;">
 
         <div class="row">
 
@@ -135,7 +148,7 @@
                 </div>
               ';
             }
-            createSection2('file-invoice', 'new_invoice.php', 'Create New Invoice');
+            createSection2('address-card', 'new_invoice.php', 'Create New Invoice');
             createSection2('user', 'add_customer.php', 'Add New Customer');
             createSection2('capsules', 'add_medicine.php', 'Add New Medicine');
             createSection2('group', 'add_supplier.php', 'Add New Supplier');
@@ -147,7 +160,7 @@
         </div>
         <!-- form content end -->
 
-        <hr style="border-top: 2px solid #ff5252;">
+        <hr style="border-top: 2px solid #AC3E31;">
 
       </div>
     </div>

@@ -111,7 +111,7 @@ function getAmount(row_number) {
 
 function addPurchase() {
   var suppliers_name = document.getElementById('suppliers_name');
-  var invoice_number = document.getElementById('invoice_number');
+  // var invoice_number = document.getElementById('invoice_number');
   var payment_type = document.getElementById('payment_type');
   var invoice_date = document.getElementById('invoice_date');
 

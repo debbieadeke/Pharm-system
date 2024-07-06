@@ -13,7 +13,7 @@ function showPurchases($start_date, $end_date) {
       <th>SL</th>
       <th>Purchase Date</th>
       <th>Voucher Number</th>
-      <th>Invoice No</th>
+      <!-- <th>Invoice No</th> -->
       <th>Supplier Name</th>
       <th>Total Amount</th>
     </tr>
@@ -38,7 +38,7 @@ function showPurchases($start_date, $end_date) {
     </tbody>
     <tfoot class="font-weight-bold">
       <tr style="text-align: right; font-size: 24px;">
-        <td colspan="5" style="color: green;">&nbsp;Total Purchases =</td>
+        <td colspan="4" style="color: green;">&nbsp;Total Purchases =</td>
         <td style="color: red;"><?php echo $total; ?></td>
       </tr>
     </tfoot>
@@ -52,7 +52,7 @@ function showPurchaseRow($seq_no, $row) {
     <td><?php echo $seq_no; ?></td>
     <td><?php echo $row['PURCHASE_DATE']; ?></td>
     <td><?php echo $row['VOUCHER_NUMBER']; ?></td>
-    <td><?php echo $row['INVOICE_ID']; ?></td>
+    <!-- <td><?php echo $row['INVOICE_ID']; ?></td> -->
     <td><?php echo $row['SUPPLIER_NAME'] ?></td>
     <td><?php echo $row['TOTAL_AMOUNT']; ?></td>
   </tr>

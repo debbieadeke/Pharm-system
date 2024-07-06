@@ -24,10 +24,11 @@ body {
 }
 
 .logo .logo-caption {
-	font-family: 'Poiret One', cursive;
+	/* font-family: 'Poiret One', cursive; */
 	color: #ffffff;
 	text-align: center;
 	margin-bottom: 25px;
+  font-size: 28px;
 }
 
 .logo .profile {
@@ -44,6 +45,8 @@ body {
 .main-menu-item {
   padding: 5px 5px;
   cursor: pointer;
+  margin-bottom: 15px;
+
 }
 
 .main-menu-item > a {

@@ -25,7 +25,7 @@
         <!-- header section -->
         <?php
           require "php/header.php";
-          createHeader('handshake', 'Manage Customer', 'Manage Existing Customer');
+          createHeader('user', 'Manage Customer', 'Manage Existing Customer');
         ?>
         <!-- header section end -->
 

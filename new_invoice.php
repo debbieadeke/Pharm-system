@@ -42,7 +42,7 @@
         <!-- header section -->
         <?php
           require "php/header.php";
-          createHeader('clipboard', 'New Invoice', 'Create New Invoice');
+          createHeader('file-invoice', 'New Invoice', 'Create New Invoice');
         ?>
         <!-- header section end -->
 
